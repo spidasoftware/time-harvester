@@ -1,0 +1,23 @@
+{
+  "name": "time-harvester",
+  "version": "0.0.0",
+  "description": "time-harvester ==============",
+  "main": "app.js",
+  "dependencies": {
+    "harvest": "0.0.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/spidasoftware/time-harvester.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spidasoftware/time-harvester/issues"
+  },
+  "homepage": "https://github.com/spidasoftware/time-harvester"
+}
