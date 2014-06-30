@@ -4,7 +4,8 @@
   "description": "time-harvester ==============",
   "main": "app.js",
   "dependencies": {
-    "harvest": "0.0.9"
+    "harvest": "0.0.9",
+    "optimist": "~0.6.1"
   },
   "devDependencies": {},
   "scripts": {
@@ -19,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/spidasoftware/time-harvester/issues"
   },
-  "homepage": "https://github.com/spidasoftware/time-harvester"
+  "homepage": "https://github.com/spidasoftware/time-harvester",
+  "bin": {
+    "time-harvester": "./time-harvester"
+  }
 }

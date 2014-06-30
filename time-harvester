@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+var argv = require('optimist').argv;
+
+console.log("Usage:  ")
+console.log(" --this: run it for this week.")
+console.log(" --last (default): run it for last week.")
+console.log("")
+
+var numberMap = {
+  "Development":404, 
+  "Code Review": 409,
+  "Admin": 402,
+  "Specification": 403
+}
+
+var Harvest = require('harvest')
+    , harvest = new Harvest({
+        subdomain: process.env.HARVEST_SUBDOMAIN,
+        email: process.env.HARVEST_EMAIL,
+        password: process.env.HARVEST_PASSWORD
+    })
+    TimeTracking = harvest.TimeTracking;
+
+var arguments = process.argv.slice(2);
+
+var convertEntryToSpida = function(harvestEntry){
+  var spidaEntry = {
+    day: harvestEntry.spent_at,
+    task:numberMap[harvestEntry.task],
+    code:harvestEntry.notes.split(" ")[0],
+    remarks:harvestEntry.notes,
+    hours:harvestEntry.hours
+  }
+  return spidaEntry
+}
+
+var weeklyTime = []
+
+if(process.argv.length)
+
+var curr = new Date; // get current date
+var first = curr.getDate() - curr.getDay() - 6; // First day is the day of the month - the day of the week
+var last = first + 6; // last day is the first day + 6
+
+if(argv.this){
+  first = first+7;
+  last = last+7;
+}
+
+var firstday = new Date(curr.setDate(first)).toUTCString();
+var lastday = new Date(curr.setDate(last)).toUTCString();
+
+console.log("Starting: "+firstday);
+console.log("Ending  : "+lastday);
+
+// { date: new Date('11/15/2012') }
+
+var timesCalled = 0;
+
+var totalTime = [];
+
+var getDayTime = function(date){
+  var retrieveDay = new Date()
+  retrieveDay.setDate(date)
+  console.log("  getting: "+retrieveDay.toUTCString());
+  TimeTracking.daily({date:retrieveDay}, function(err, tasks) {
+    if (err) throw new Error(err);
+    for (var i = tasks.day_entries.length - 1; i >= 0; i--) {
+      var harvestEntry = tasks.day_entries[i]
+      totalTime.push(convertEntryToSpida(harvestEntry))
+    };
+    if(timesCalled<6){
+      timesCalled = timesCalled + 1
+      getDayTime(date+1);
+    }else{
+      console.log("Finished");
+      console.log(totalTime);
+    }
+  });
+}
+
+getDayTime(first);
+
+
+
