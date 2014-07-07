@@ -5,12 +5,14 @@ var argv = require('optimist').argv;
 console.log("Usage:  ")
 console.log(" --this: run it for this week.")
 console.log(" --last (default): run it for last week.")
+// console.log(" --file: Where to pipe the JSON string.")
 console.log("")
 
 var numberMap = {
   "Development":404, 
   "Code Review": 409,
   "Admin": 402,
+  "Testing": 405,
   "Specification": 403
 }
 
@@ -69,16 +71,22 @@ var getDayTime = function(date){
     if (err) throw new Error(err);
     for (var i = tasks.day_entries.length - 1; i >= 0; i--) {
       var harvestEntry = tasks.day_entries[i]
-      totalTime.push(convertEntryToSpida(harvestEntry))
+      if(harvestEntry.hours>0){
+        totalTime.push(convertEntryToSpida(harvestEntry))
+      }
     };
     if(timesCalled<6){
       timesCalled = timesCalled + 1
       getDayTime(date+1);
     }else{
       console.log("Finished");
-      console.log(totalTime);
+      console.log(JSON.stringify(totalTime));
     }
   });
+}
+
+if(argv.file){
+
 }
 
 getDayTime(first);
