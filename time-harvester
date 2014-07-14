@@ -13,6 +13,9 @@ var Harvest = require('harvest')
       TimeTracking = harvest.TimeTracking;
 
 var convertEntryToSpida = function(harvestEntry){
+    if (harvestEntry.hours==0) {
+        return false
+    }
     var spent_at = harvestEntry.spent_at.toString()
     if (harvestEntry.notes==null) harvestEntry.notes='SPIDA';
     var spidaEntry = {
@@ -49,7 +52,7 @@ Promise.settle(
     R.map(function(i) {
         var day=new Date();
         day.setDate(first+i);
-        return daily({date:day}).then(R.compose(R.map(convertEntryToSpida),R.prop('day_entries')));
+        return daily({date:day}).then(R.compose(R.filter(R.identity),R.map(convertEntryToSpida),R.prop('day_entries')));
     }, R.range(0,6))
 )
 .then(R.compose(console.log,JSON.stringify,R.flatten,R.map(R.func('value'))))
