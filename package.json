@@ -5,6 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "harvest": "0.0.9",
+    "bluebird": "~2.2.1",
+    "ramda": "~0.2.3",
     "optimist": "~0.6.1"
   },
   "devDependencies": {},
