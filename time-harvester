@@ -19,7 +19,7 @@ var convertEntryToSpida = function(harvestEntry){
     var spent_at = harvestEntry.spent_at.toString()
     if (harvestEntry.notes==null) harvestEntry.notes='SPIDA';
     var spidaEntry = {
-      day: spent_at[5]+spent_at[6]+"/"+spent_at[8]+spent_at[9]+"/"+spent_at[0]+spent_at[1]+spent_at[2]+spent_at[3],
+      date: spent_at[5]+spent_at[6]+"/"+spent_at[8]+spent_at[9]+"/"+spent_at[0]+spent_at[1]+spent_at[2]+spent_at[3],
       task:harvestEntry.task,
       code:harvestEntry.notes.split(" ")[0],
       remarks:harvestEntry.notes,
