@@ -7,6 +7,7 @@
 var argv = require('optimist').argv;
 var Promise = require('bluebird');
 var R = require('ramda');
+var _ = require('lodash');
 
 var Harvest = require('harvest')
       , harvest = new Harvest({
@@ -61,7 +62,9 @@ Promise.settle(
 )
 .then(function(v){
   if(argv.review){
-    console.log(R.compose(R.flatten,R.map(R.func('value')))(v))
+    _.each(R.compose(R.flatten,R.map(R.func('value')))(v), function(entry){
+      console.log(entry.hours+" "+entry.date+" "+entry.task+" "+entry.code+' '+entry.remarks)
+    })
     console.log("Total Hours: "+R.sum(R.pluck("hours", R.compose(R.flatten,R.map(R.func('value')))(v) )))
   }else{
     R.compose(console.log,JSON.stringify,R.flatten,R.map(R.func('value')))(v)
