@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// options:
+// --this: pull the time for this week, not last
+// --review: human readable output. 
+
 var argv = require('optimist').argv;
 var Promise = require('bluebird');
 var R = require('ramda');
@@ -55,7 +59,14 @@ Promise.settle(
         return daily({date:day}).then(R.compose(R.filter(R.identity),R.map(convertEntryToSpida),R.prop('day_entries')));
     }, R.range(0,6))
 )
-.then(R.compose(console.log,JSON.stringify,R.flatten,R.map(R.func('value'))))
+.then(function(v){
+  if(argv.review){
+    console.log(R.compose(R.flatten,R.map(R.func('value')))(v))
+    console.log("Total Hours: "+R.sum(R.pluck("hours", R.compose(R.flatten,R.map(R.func('value')))(v) )))
+  }else{
+    R.compose(console.log,JSON.stringify,R.flatten,R.map(R.func('value')))(v)
+  }
+})
 .catch(function(err) { throw err; });
 
 
